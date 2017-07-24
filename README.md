@@ -7,7 +7,7 @@ gnome-terminal etc.
 
 Modern terminal emulators no longer write to utmp ([see
 here](https://bugzilla.gnome.org/show_bug.cgi?id=747046), for example).
-Consequently things like `wall`, `who`, `rwho`, `talk`, `rtvtty` etc. no
+Consequently things like `wall`, `who`, `rwho`, `talk`, `rcvtty` etc. no
 longer work.  This tiny wrapper can be used to restore that
 functionality.
 
