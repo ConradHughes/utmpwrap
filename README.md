@@ -5,26 +5,23 @@ gnome-terminal etc.
 
 ---
 
-Intention is to wrap shell invocation in gnome-terminal or similar, such
-that utmp entries are created.
+Modern terminal emulators no longer write to utmp ([see
+here](https://bugzilla.gnome.org/show_bug.cgi?id=747046), for example).
+Consequently things like `wall`, `who`, `who`, `talk`, `rtvtty` etc. no
+longer work.  This tiny wrapper can be used to restore that
+functionality.
 
-Context is [stuff like
-this](https://bugzilla.gnome.org/show_bug.cgi?id=747046), wherein
-support for utmp has been removed from modern terminal emulators.
-
-Invocation example:
+Example usage would be to edit your profile for `gnome-terminal` to run
+a custom command based on this template instead of your default login
+shell:
 
 ```sh
-utmp_wrap /bin/tcsh -l
+/full/path/to/utmp_wrap /your/shell --login
 ```
 
-Currently this doesn't appear to work since I don't understand how to
-invoke libutempter correctly.  `utempter_add_record` seems to think it
-has succeeded, but on deeper investigation it hasn't: it invokes
-`/usr/lib/x86_64-linux-gnu/utempter/utempter`, which fails silently, but
-`utempter_add_record` returns happily regardless.
+… so a `tcsh` user might set this to `…/utmp_wrap /bin/tcsh -l`.
 
-`utempter`'s fail appears to be because `ptsname(STDIN_FILENO)` fails
-with errno 25 (ENOTTY, reported as "Inappropriate ioctl for device", but
-interpreted by `ptsname`'s manpage as having not been invoked on a
-master pty).
+This code is enabled by, and dependent on, libutempter; unfortunately
+[version 1.1.6-3 of this on Debian is
+broken](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=869617).  The
+patch attached to that report enables successful use of utmp\_wrap.
