@@ -27,4 +27,4 @@ has succeeded, but on deeper investigation it hasn't: it invokes
 `utempter`'s fail appears to be because `ptsname(STDIN_FILENO)` fails
 with errno 25 (ENOTTY, reported as "Inappropriate ioctl for device", but
 interpreted by `ptsname`'s manpage as having not been invoked on a
-master pty.
+master pty).
